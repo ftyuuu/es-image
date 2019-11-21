@@ -5,7 +5,7 @@ RUN mkdir -p /home/appuser && \
     adduser -u 1000 -S -h /home/appuser -G app appuser
 
 WORKDIR /home/appuser
-COPY /code/app.o .
+COPY code/app.o .
 
 RUN chown -R appuser:app /home/appuser
 USER appuser
