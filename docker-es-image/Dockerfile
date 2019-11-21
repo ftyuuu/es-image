@@ -27,6 +27,8 @@ RUN echo "root   -     memlock  unlimited" >> /etc/security/limits.conf
 RUN echo "*      -     memlock  unlimited" >> /etc/security/limits.conf
 RUN echo "root   -     nproc    10000" >> /etc/security/limits.conf
 RUN echo "*      -     nproc    10000" >> /etc/security/limits.conf
+RUN echo "elasticsearch soft memlock unlimited" >> /etc/security/limits.conf
+RUN echo "elasticsearch hard memlock unlimited" >> /etc/security/limits.conf
 
 COPY config/elasticsearch.yml config/jvm.options /usr/share/elasticsearch/config/
 
