@@ -1,0 +1,27 @@
+# cluster
+cluster.name: ${CLUSTER_NAME}
+
+# node
+node.name: ${NODE_NAME}
+node.master: ${NODE_MASTER}
+node.data: ${NODE_DATA}
+node.ingest: false
+cluster.remote.connect: ${CLUSTER_REMOTE_CONNECT}
+
+# network
+network.host: ${NETWORK_HOST}
+transport.tcp.port: ${TRANSPORT_TCP_PORT}
+http.port: ${HTTP_PORT}
+
+# bootstrap
+bootstrap.memory_lock: ${MEMORY_LOCK}
+bootstrap.system_call_filter: false
+
+# paths
+path.data: ${PATH_DATA}
+path.logs: ${PATH_LOGS}
+
+# discovery
+discovery.zen.ping.unicast.hosts: ${DISCOVERY_SERVICE}
+discovery.zen.minimum_master_nodes: ${MINIMUM_MASTER_NODES}
+
