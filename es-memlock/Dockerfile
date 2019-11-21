@@ -11,6 +11,7 @@ COPY code/app.o .
 RUN chown -R appuser:app /home/appuser
 RUN setcap cap_ipc_lock=+ep app.o
 RUN chown appuser:app app.o
+RUN chmod 755 app.o
 USER appuser
 
 CMD ["./app.o"]
