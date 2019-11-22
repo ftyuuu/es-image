@@ -1,5 +1,5 @@
 FROM debian:9.1 AS builder
-LABEL maintainer="futengyu@corp.netease.com" 
+LABEL maintainer="futengyu@corp.netease.com"
 
 ENV PATH=/usr/share/elasticsearch/bin:$PATH
 ENV JAVA_HOME=/usr/share/jdk-13+33
@@ -11,7 +11,7 @@ RUN cd /usr/share/ \
     && apt-get -y install curl \
     && curl -L --retry 8 -s https://github.com/AdoptOpenJDK/openjdk13-binaries/releases/download/jdk-13%2B33/OpenJDK13U-jdk_x64_linux_hotspot_13_33.tar.gz | tar -C /usr/share -zxf -
 RUN java -version
-RUN groupadd -g 1000 elasticsearch && useradd -u 1000 -g 1000 -d /usr/share/elasticsearch elasticsearch 
+RUN groupadd -g 1000 elasticsearch && useradd -u 1000 -g 1000 -d /usr/share/elasticsearch elasticsearch
 RUN cd /usr/share/elasticsearch \
     && curl --retry 8 -s -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-oss-6.8.4.tar.gz \
     && tar zxf elasticsearch-oss-6.8.4.tar.gz --strip-components=1 \
@@ -19,6 +19,7 @@ RUN cd /usr/share/elasticsearch \
 
 RUN mkdir /data
 
+COPY code/run.sh /usr/share/elasticsearch/bin/run.sh
 COPY config/elasticsearch.yml config/jvm.options /usr/share/elasticsearch/config/
 RUN chmod 0775 -R /usr/share/elasticsearch /data \
     && chgrp -R elasticsearch /usr/share/elasticsearch/ /data \
@@ -59,7 +60,6 @@ LABEL org.label-schema.name="netease.com/nes/elasticsearch" \
 
 
 WORKDIR /usr/share/elasticsearch
-USER elasticsearch:elasticsearch
 EXPOSE 9200 9300
 
-CMD ["elasticsearch"]
+CMD ["run.sh"]
