@@ -17,6 +17,8 @@ RUN cd /usr/share/elasticsearch \
     && tar zxf elasticsearch-oss-6.8.4.tar.gz --strip-components=1 \
     && rm elasticsearch-oss-6.8.4.tar.gz \
     && mkdir data
+
+COPY config/elasticsearch.yml config/jvm.options /usr/share/elasticsearch/config/
 RUN chmod 0775 -R /usr/share/elasticsearch \
     && chgrp -R elasticsearch /usr/share/elasticsearch/ \
     && chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/
@@ -30,7 +32,6 @@ RUN echo "*      -     nproc    10000" >> /etc/security/limits.conf
 RUN echo "elasticsearch soft memlock unlimited" >> /etc/security/limits.conf
 RUN echo "elasticsearch hard memlock unlimited" >> /etc/security/limits.conf
 
-COPY config/elasticsearch.yml config/jvm.options /usr/share/elasticsearch/config/
 
 ENV CLUSTER_NAME="elasticsearch-cluster"
 ENV NODE_MASTER=true
@@ -39,7 +40,7 @@ ENV CLUSTER_REMOTE_CONNECT=true
 ENV NETWORK_HOST="_local_"
 ENV TRANSPORT_TCP_PORT=9300
 ENV HTTP_PORT=9200
-ENV MEMORY_LOCK=true
+ENV MEMORY_LOCK=false
 ENV PATH_DATA="/usr/share/elasticsearch/data"
 ENV PATH_LOGS="/usr/share/elasticsearch/logs"
 ENV DISCOVERY_SERVICE=""
