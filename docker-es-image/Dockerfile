@@ -15,13 +15,14 @@ RUN groupadd -g 1000 elasticsearch && useradd -u 1000 -g 1000 -d /usr/share/elas
 RUN cd /usr/share/elasticsearch \
     && curl --retry 8 -s -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-oss-6.8.4.tar.gz \
     && tar zxf elasticsearch-oss-6.8.4.tar.gz --strip-components=1 \
-    && rm elasticsearch-oss-6.8.4.tar.gz \
-    && mkdir data
+    && rm elasticsearch-oss-6.8.4.tar.gz
+
+RUN mkdir /data
 
 COPY config/elasticsearch.yml config/jvm.options /usr/share/elasticsearch/config/
-RUN chmod 0775 -R /usr/share/elasticsearch \
-    && chgrp -R elasticsearch /usr/share/elasticsearch/ \
-    && chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/
+RUN chmod 0775 -R /usr/share/elasticsearch /data \
+    && chgrp -R elasticsearch /usr/share/elasticsearch/ /data \
+    && chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/ /data
 
 RUN echo "root   -     nofile   100000" >> /etc/security/limits.conf
 RUN echo "*      -     nofile   100000" >> /etc/security/limits.conf
@@ -41,14 +42,12 @@ ENV NETWORK_HOST="_local_"
 ENV TRANSPORT_TCP_PORT=9300
 ENV HTTP_PORT=9200
 ENV MEMORY_LOCK=false
-ENV PATH_DATA="/usr/share/elasticsearch/data"
+ENV PATH_DATA="/data"
 ENV PATH_LOGS="/usr/share/elasticsearch/logs"
 ENV DISCOVERY_SERVICE=""
 ENV MINIMUM_MASTER_NODES=1
 ENV ES_JAVA_OPTS="-Xms256m -Xmx256m"
 ENV NODE_NAME=$hostname
-
-EXPOSE 9200 9300
 
 LABEL org.label-schema.name="netease.com/nes/elasticsearch" \
   org.label-schema.schema-version="1.0" \
@@ -61,5 +60,6 @@ LABEL org.label-schema.name="netease.com/nes/elasticsearch" \
 
 WORKDIR /usr/share/elasticsearch
 USER elasticsearch:elasticsearch
+EXPOSE 9200 9300
 
 CMD ["elasticsearch"]
